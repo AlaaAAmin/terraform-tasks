@@ -2,7 +2,7 @@
 resource "aws_security_group" "allow_ssh" {
   name        = "allow_ssh"
   description = "allow_ssh inbound traffic"
-  vpc_id      = aws_vpc.tf-playground.id
+  vpc_id      = module.network.vpc_id
 
   ingress {
     description = "allow_ssh"
@@ -29,14 +29,14 @@ resource "aws_security_group" "allow_ssh" {
 resource "aws_security_group" "ssh-and-port3000" {
   name        = "ssh-and-port3000"
   description = "ssh-and-port3000 inbound traffic"
-  vpc_id      = aws_vpc.tf-playground.id
+  vpc_id      = module.network.vpc_id
 
   ingress {
     description = "allow ssh"
     from_port   = 22
     to_port     = 22
     protocol    = "tcp"
-    cidr_blocks = [aws_vpc.tf-playground.cidr_block]
+    cidr_blocks = [var.vpc_cidr]
   }
 
   ingress {
@@ -44,7 +44,7 @@ resource "aws_security_group" "ssh-and-port3000" {
     from_port   = 3000
     to_port     = 3000
     protocol    = "tcp"
-    cidr_blocks = [aws_vpc.tf-playground.cidr_block]
+    cidr_blocks = [var.vpc_cidr]
   }
 
   egress {
